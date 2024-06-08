@@ -29,7 +29,7 @@ X = df.drop('Q00301', axis=1)
 y = df['Q00301']
 print(f'X antes do tratamento: {X}')
 X = remove_outliers_iqr(X, factor=2)
-print(f'X depois do tratamento: {X}')
+print(f'X depois  do tratamento: {X}')
 
 # Imputação de dados ausentes com HistGradientBoostingClassifier
 # HistGradientBoostingClassifier lida nativamente com NaNs, portanto, não precisamos de IterativeImputer
