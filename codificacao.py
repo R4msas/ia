@@ -17,17 +17,20 @@ variaveisOneHot = verificaOneHot(df, variaveisContinuas)
 le = LabelEncoder()
 df['C006'] = le.fit_transform(df['C006'])
 
-onehotencoder = OneHotEncoder(drop='first')
-onehot_encoded = onehotencoder.fit_transform(df[variaveisOneHot]).toarray()
-onehot_encoded_df = pd.DataFrame(onehot_encoded, columns=onehotencoder.get_feature_names_out(variaveisOneHot))
-df = df.drop(variaveisOneHot, axis=1)
-df = pd.concat([df, onehot_encoded_df], axis=1)
+# Aplicar OneHotEncoder às variáveis categóricas
+onehotencoder = OneHotEncoder(sparse=False, drop='first')  # drop='first' to avoid the dummy variable trap
+onehot_encoded = onehotencoder.fit_transform(df[variaveisOneHot])
 
 # Criar DataFrame com os nomes das novas colunas codificadas
 onehot_encoded_df = pd.DataFrame(onehot_encoded, columns=[
     f"{col}_{category}" for col, categories in zip(variaveisOneHot, onehotencoder.categories_) 
     for category in categories[1:]  # Skipping the first category due to drop='first'
 ])
+
+# Concatenar o DataFrame original com as variáveis codificadas
+df = df.drop(variaveisOneHot, axis=1)
+df = pd.concat([df.reset_index(drop=True), onehot_encoded_df.reset_index(drop=True)], axis=1)
+
 
 # Normaliza dados contínuos
 scaler = StandardScaler()
