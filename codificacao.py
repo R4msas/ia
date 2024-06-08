@@ -22,6 +22,13 @@ onehot_encoded = onehotencoder.fit_transform(df[variaveisOneHot]).toarray()
 onehot_encoded_df = pd.DataFrame(onehot_encoded, columns=onehotencoder.get_feature_names_out(variaveisOneHot))
 df = df.drop(variaveisOneHot, axis=1)
 df = pd.concat([df, onehot_encoded_df], axis=1)
+
+# Criar DataFrame com os nomes das novas colunas codificadas
+onehot_encoded_df = pd.DataFrame(onehot_encoded, columns=[
+    f"{col}_{category}" for col, categories in zip(variaveisOneHot, onehotencoder.categories_) 
+    for category in categories[1:]  # Skipping the first category due to drop='first'
+])
+
 # Normaliza dados contínuos
 scaler = StandardScaler()
 df[variaveisContinuas] = scaler.fit_transform(df[variaveisContinuas])

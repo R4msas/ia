@@ -34,6 +34,7 @@ def verificaClassificatorias(df,variaveisContinuas):
     resp.remove('C008')#retira a idade do morador, pois não há tratamento a ser feito, já foram retirados os valores nulos
     for col in variaveisContinuas:
         resp.remove(col)
+    resp.remove('Q03001')
     return resp
     
 # def imputarVariaveisContinuas(df, variaveisContinuas):
@@ -59,11 +60,13 @@ def imputarVariaveisClassificatorias(df, variaveisClassificatorias):
     return df
 
 df = pd.read_csv('Dados.csv')
-
 variaveisContinuas=['K04302','P00404','P00104']
 variaveisClassificatorias=verificaClassificatorias(df,variaveisContinuas)
 print(df.shape)
 df=removeOutliers(df,variaveisContinuas)
+diabetes=df['Q03001']
+df=df.drop('Q03001',axis=1)
+
 print(df)
 # df=imputarVariaveisContinuas(df, variaveisContinuas)
 # print(df)
@@ -71,6 +74,8 @@ df=imputarVariaveisClassificatorias(df, variaveisClassificatorias)
 df_imputed=imputarVariaveisContinuas(df)
 arredondamento=pd.Series([0],index=['K04302'])
 df_imputed.round(arredondamento)
+df_imputed['Q03001']=diabetes
+df_imputed=df_imputed[df_imputed['Q03001'].notna()]
 print(df_imputed)
 df_imputed.drop_duplicates(inplace=True)
 df_imputed.to_csv("SemOutlierSemNAN.csv")
