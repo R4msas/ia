@@ -21,12 +21,12 @@ RANDOM_STATE = 42
 # Carregar os dados
 df = pd.read_csv('DadosBasicos.csv')
 
-# Remover amostras onde não haja resposta numérica na classe "Q00201"
-df = df[pd.to_numeric(df['Q00201'], errors='coerce').notnull()]
+# Remover amostras onde não haja resposta numérica na classe "Q00301"
+df = df[pd.to_numeric(df['Q00301'], errors='coerce').notnull()]
 
 # Separar features e target
-X = df.drop('Q00201', axis=1)
-y = df['Q00201']
+X = df.drop('Q00301', axis=1)
+y = df['Q00301']
 print(f'X antes do tratamento: {X}')
 X = remove_outliers_iqr(X, factor=2)
 print(f'X depois do tratamento: {X}')
@@ -54,7 +54,7 @@ smote = SMOTE(sampling_strategy='auto', random_state=RANDOM_STATE)
 X_res, y_res = smote.fit_resample(X, y)
 
 # Combinar novamente o dataframe balanceado
-df_res = pd.concat([pd.DataFrame(X_res, columns=X.columns), pd.DataFrame(y_res, columns=['Q00201'])], axis=1)
+df_res = pd.concat([pd.DataFrame(X_res, columns=X.columns), pd.DataFrame(y_res, columns=['Q00301'])], axis=1)
 
 # Remover duplicatas
 df_res = df_res.drop_duplicates()
