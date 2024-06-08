@@ -22,6 +22,10 @@ def defineOutliersIndex(nomeColuna, df):
     
     return outliers_indices
 
+def removeOutliers(df, variaveisContinuas):
+    for col in variaveisContinuas:
+        index = defineOutliersIndex(col, df)
+        df = df.drop(index)
 
 # def remove_outliers_iqr(data, factor=2):
 #     Q1 = data.quantile(0.25)
@@ -46,13 +50,11 @@ print(df)
 # Remover amostras onde não haja resposta numérica na classe "Q00301", diabetes
 # df = df[pd.to_numeric(df['Q00301'], errors='coerce').notnull()]
 variaveisContinuas=['K04302','P00404','P00104']
+removeOutliers(df, variaveisContinuas)
+print(df)
 
-for col in variaveisContinuas:
-    index = defineOutliersIndex(col, df)
-    df = df.drop(index)
 
-# df = df[df['K04302'] < 90]
-# df = df[df['P00404'] < 300]
+
 
 juice = df['P02002']
 soda = df['P02001']
