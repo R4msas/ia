@@ -5,6 +5,7 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 def verificaOneHot(df,variaveisContinuas):
     resp=list(df.columns)
     resp.remove('C006')
+    resp.remove('C008')
     for col in variaveisContinuas:
         resp.remove(col)
     return resp
